@@ -18,14 +18,16 @@
 > 非法值、逻辑矛盾、缺失、离群值**不自动替换**（避免引入假数据），全部列入报告由人工核对修改；只对无争议的整行重复、空行空列、列名做自动处理并留痕。
 
 flowchart LR
-    A[文件读写层<br/>rio / readxl / vroom / openxlsx] --> B[①重复个案<br/>janitor]
-    B --> C[②非法值<br/>pointblank, assertr]
-    C --> D[③逻辑关系<br/>validate, pointblank]
-    D --> E[④缺失值<br/>naniar, visdat, dlookr]
-    E --> F[⑤异常连续变量<br/>dlookr, dataReporter]
-    F --> G[⑥输出异常<br/>DataExplorer, dlookr, skimr]
-    G --> H[⑦改动记录日志<br/>tidylog, validate]
-    H --> I[⑧clean数据<br/>导出xlsx/csv+归档报告]
+    subgraph READ["文件读写层<br/>rio(621★) · readxl(754★) · vroom(643★) · openxlsx(241★)"]
+    end
+    READ --> B["①重复个案<br/>janitor 1459★"]
+    B --> C["②非法值<br/>pointblank 1050★<br/>assertr 484★"]
+    C --> D["③逻辑关系<br/>validate 434★<br/>pointblank"]
+    D --> E["④缺失值<br/>naniar 675★<br/>visdat 463★ / dlookr 214★"]
+    E --> F["⑤异常连续变量<br/>dlookr 214★<br/>dataReporter 143★"]
+    F --> G["⑥输出异常<br/>DataExplorer 544★<br/>dlookr / pointblank / skimr"]
+    G --> H["⑦改动记录日志<br/>tidylog 623★<br/>validate"]
+    H --> I["⑧clean数据<br/>导出xlsx/csv，报告归档"]
 
 ## 安装
 
