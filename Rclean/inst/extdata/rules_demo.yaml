@@ -1,0 +1,50 @@
+# Rclean 演示规则（与 demo_survey.xlsx 配套，YAML 版）
+dataset: demo_survey
+
+dupes:
+  key: [ID]
+
+missing:
+  key: [ID]
+
+outliers:
+  method: iqr
+  k: 1.5
+  columns: [AGE, MAXTEMP]
+
+rules:
+  - id: SEX_legal
+    check: in_set
+    column: SEX
+    values: [1, 2]
+    severity: error
+
+  - id: AGE_range
+    check: between
+    column: AGE
+    min: 0
+    max: 120
+    severity: error
+
+  - id: MAXTEMP_range
+    check: between
+    column: MAXTEMP
+    min: 35
+    max: 42
+    severity: error
+
+  - id: ID_not_null
+    check: not_null
+    column: ID
+    severity: error
+
+  - id: PHONE_regex
+    check: regex
+    column: PHONE
+    values: ["^1[3-9][0-9]{9}$"]
+    severity: warning
+
+  # 跨变量逻辑表达式示例（本演示数据无日期列，故注释；你的问卷可照此添加）
+  # - id: date_logic
+  #   check: expr
+  #   expr: "ONSETDT >= BIRTHDT | is.na(ONSETDT) | is.na(BIRTHDT)"

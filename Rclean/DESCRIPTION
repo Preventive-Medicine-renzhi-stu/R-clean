@@ -1,0 +1,45 @@
+Package: Rclean
+Title: Reproducible Quality Control and Cleaning for Survey Data (xlsx/csv)
+Version: 0.1.0
+Authors@R:
+    person(given = "Renzhi",
+           family = "Yang",
+           email = "your.email@example.com",
+           role = c("aut", "cre"))
+Description: Eight-step data quality control workflow for questionnaire /
+    epidemiological survey data stored as xlsx or csv: (1) duplicate cases,
+    (2) illegal values, (3) cross-variable logical checks, (4) missing
+    values, (5) outliers of continuous variables, (6) consolidated anomaly
+    report, (7) change log of every cleaning action, (8) export of the clean
+    dataset. Questionnaire-specific rules (ranges, legal values, logical
+    expressions) are kept outside the code in Excel or YAML rule tables.
+License: MIT + file LICENSE
+URL: https://github.com/Preventive-Medicine-renzhi-stu/Rclean
+BugReports: https://github.com/Preventive-Medicine-renzhi-stu/Rclean/issues
+Encoding: UTF-8
+Roxygen: list(markdown = TRUE)
+Depends:
+    R (>= 3.6)
+Imports:
+    dplyr,
+    janitor,
+    readxl,
+    rlang,
+    stats,
+    tibble,
+    tools,
+    utils,
+    yaml
+Suggests:
+    naniar,
+    openxlsx,
+    openxlsx2,
+    pointblank,
+    readr,
+    rio,
+    rmarkdown,
+    testthat (>= 3.0.0),
+    validate,
+    vroom
+Config/testthat/edition: 3
+Config/roxygen2/version: 8.1.0

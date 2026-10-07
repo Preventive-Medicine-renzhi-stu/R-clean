@@ -1,0 +1,48 @@
+---
+title: "数据质控报告（自定义模板）"
+output: html_document
+params:
+  qc: NULL
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, warning = FALSE, message = FALSE)
+```
+
+数据文件：**`r params$qc$data_file`**，`r params$qc$n_rows` 行 × `r params$qc$n_cols` 列；
+生成时间：`r params$qc$generated`。
+
+## 规则核查汇总
+
+```{r}
+knitr::kable(params$qc$rule_summary)
+```
+
+## 重复个案
+
+```{r}
+knitr::kable(utils::head(params$qc$dupes, 50))
+```
+
+## 非法值与逻辑异常
+
+```{r}
+knitr::kable(utils::head(params$qc$violations, 100))
+```
+
+## 缺失值
+
+```{r}
+knitr::kable(params$qc$missing)
+```
+
+## 连续变量离群界值与明细
+
+```{r}
+knitr::kable(params$qc$outlier_bounds)
+knitr::kable(utils::head(params$qc$outliers, 100))
+```
+
+> 用法：`x <- run_qc(..., do_clean=FALSE)` 后，
+> `rmarkdown::render(system.file("templates","qc_report.Rmd",package="Rclean"),
+> params=list(qc=x), output_file="my_report.html")`
