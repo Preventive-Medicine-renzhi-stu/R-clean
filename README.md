@@ -17,80 +17,15 @@
 
 > 非法值、逻辑矛盾、缺失、离群值**不自动替换**（避免引入假数据），全部列入报告由人工核对修改；只对无争议的整行重复、空行空列、列名做自动处理并留痕。
 
-<html style="margin:0;padding:0;">
-<title>R 语言 xlsx/csv 数据清洗流程与高星包映射</title>
-<div style="width:100%;box-sizing:border-box;font-family:-apple-system,'PingFang SC','Microsoft YaHei',sans-serif;background:#f6f8fb;padding:20px 16px;">
-  <div style="font-size:20px;font-weight:700;color:#1f2d3d;margin-bottom:4px;">R 语言 · xlsx/csv 数据清洗 8 步流程与高星包</div>
-  <div style="font-size:13px;color:#5b6b7c;margin-bottom:16px;">星数为 2026-10-07 GitHub 实测；读写层贯穿始终，清洗主流程按你的 8 步排列</div>
-  <div style="background:#eef4ee;border:1px solid #cfe0cf;border-radius:10px;padding:10px 12px;margin-bottom:16px;">
-    <div style="font-size:14px;font-weight:700;color:#2f7d5a;margin-bottom:6px;">文件读写层（xlsx / csv）</div>
-    <div style="display:flex;flex-wrap:wrap;gap:8px;font-size:13px;color:#1f2d3d;">
-      <span style="background:#fff;border:1px solid #d5e2d5;border-radius:6px;padding:4px 8px;"><b>rio</b> 621★ · import()/export() 统一读写</span>
-      <span style="background:#fff;border:1px solid #d5e2d5;border-radius:6px;padding:4px 8px;"><b>readxl</b> 754★ · read_excel() 读 xlsx</span>
-      <span style="background:#fff;border:1px solid #d5e2d5;border-radius:6px;padding:4px 8px;"><b>vroom</b> 643★ · 极速读 csv/tsv</span>
-      <span style="background:#fff;border:1px solid #d5e2d5;border-radius:6px;padding:4px 8px;"><b>openxlsx</b> 241★ · write.xlsx() 写回（新版 openxlsx2 200★）</span>
-    </div>
-  </div>
-  <div style="display:flex;flex-wrap:wrap;align-items:center;gap:6px;margin-bottom:16px;">
-    <div style="display:flex;align-items:center;gap:6px;background:#e8eef7;border:1px solid #c7d6ea;border-radius:20px;padding:5px 10px;"><span style="width:20px;height:20px;border-radius:50%;background:#3b6fd4;color:#fff;font-size:13px;font-weight:700;display:flex;align-items:center;justify-content:center;">1</span><span style="font-size:14px;color:#1f2d3d;font-weight:600;">重复个案</span></div>
-    <span style="color:#9aa8b8;font-size:14px;">→</span>
-    <div style="display:flex;align-items:center;gap:6px;background:#e8eef7;border:1px solid #c7d6ea;border-radius:20px;padding:5px 10px;"><span style="width:20px;height:20px;border-radius:50%;background:#3b6fd4;color:#fff;font-size:13px;font-weight:700;display:flex;align-items:center;justify-content:center;">2</span><span style="font-size:14px;color:#1f2d3d;font-weight:600;">非法值</span></div>
-    <span style="color:#9aa8b8;font-size:14px;">→</span>
-    <div style="display:flex;align-items:center;gap:6px;background:#e8eef7;border:1px solid #c7d6ea;border-radius:20px;padding:5px 10px;"><span style="width:20px;height:20px;border-radius:50%;background:#3b6fd4;color:#fff;font-size:13px;font-weight:700;display:flex;align-items:center;justify-content:center;">3</span><span style="font-size:14px;color:#1f2d3d;font-weight:600;">逻辑关系</span></div>
-    <span style="color:#9aa8b8;font-size:14px;">→</span>
-    <div style="display:flex;align-items:center;gap:6px;background:#e8eef7;border:1px solid #c7d6ea;border-radius:20px;padding:5px 10px;"><span style="width:20px;height:20px;border-radius:50%;background:#3b6fd4;color:#fff;font-size:13px;font-weight:700;display:flex;align-items:center;justify-content:center;">4</span><span style="font-size:14px;color:#1f2d3d;font-weight:600;">缺失值</span></div>
-    <span style="color:#9aa8b8;font-size:14px;">→</span>
-    <div style="display:flex;align-items:center;gap:6px;background:#e8eef7;border:1px solid #c7d6ea;border-radius:20px;padding:5px 10px;"><span style="width:20px;height:20px;border-radius:50%;background:#3b6fd4;color:#fff;font-size:13px;font-weight:700;display:flex;align-items:center;justify-content:center;">5</span><span style="font-size:14px;color:#1f2d3d;font-weight:600;">异常连续变量</span></div>
-    <span style="color:#9aa8b8;font-size:14px;">→</span>
-    <div style="display:flex;align-items:center;gap:6px;background:#e8eef7;border:1px solid #c7d6ea;border-radius:20px;padding:5px 10px;"><span style="width:20px;height:20px;border-radius:50%;background:#3b6fd4;color:#fff;font-size:13px;font-weight:700;display:flex;align-items:center;justify-content:center;">6</span><span style="font-size:14px;color:#1f2d3d;font-weight:600;">输出异常</span></div>
-    <span style="color:#9aa8b8;font-size:14px;">→</span>
-    <div style="display:flex;align-items:center;gap:6px;background:#e8eef7;border:1px solid #c7d6ea;border-radius:20px;padding:5px 10px;"><span style="width:20px;height:20px;border-radius:50%;background:#3b6fd4;color:#fff;font-size:13px;font-weight:700;display:flex;align-items:center;justify-content:center;">7</span><span style="font-size:14px;color:#1f2d3d;font-weight:600;">改动记录日志</span></div>
-    <span style="color:#9aa8b8;font-size:14px;">→</span>
-    <div style="display:flex;align-items:center;gap:6px;background:#2f7d5a;border:1px solid #1f5f44;border-radius:20px;padding:5px 10px;"><span style="width:20px;height:20px;border-radius:50%;background:#fff;color:#2f7d5a;font-size:13px;font-weight:700;display:flex;align-items:center;justify-content:center;">8</span><span style="font-size:14px;color:#fff;font-weight:600;">clean 数据</span></div>
-  </div>
-  <div style="display:flex;flex-wrap:wrap;gap:10px;">
-    <div style="flex:1 1 160px;min-width:160px;background:#fff;border:1px solid #dfe6ef;border-radius:10px;padding:12px;">
-      <div style="font-size:14px;font-weight:700;color:#3b6fd4;margin-bottom:6px;">① 重复个案</div>
-      <div style="font-size:14px;line-height:1.55;color:#1f2d3d;"><b>janitor</b> 1459★<br><a href="https://github.com/sfirke/janitor" style="color:#2f7d5a;">github.com/sfirke/janitor</a><br><span style="color:#5b6b7c;font-size:12px;">get_dupes() 列出全部重复记录</span></div>
-    </div>
-    <div style="flex:1 1 160px;min-width:160px;background:#fff;border:1px solid #dfe6ef;border-radius:10px;padding:12px;">
-      <div style="font-size:14px;font-weight:700;color:#3b6fd4;margin-bottom:6px;">② 非法值</div>
-      <div style="font-size:14px;line-height:1.55;color:#1f2d3d;"><b>pointblank</b> 1050★<br><a href="https://github.com/rstudio/pointblank" style="color:#2f7d5a;">github.com/rstudio/pointblank</a><br><span style="color:#5b6b7c;font-size:12px;">col_vals_in_set / between / regex</span></div>
-      <div style="font-size:14px;line-height:1.55;color:#1f2d3d;margin-top:6px;"><b>assertr</b> 484★<br><a href="https://github.com/tonyfischetti/assertr" style="color:#2f7d5a;">github.com/tonyfischetti/assertr</a></div>
-    </div>
-    <div style="flex:1 1 160px;min-width:160px;background:#fff;border:1px solid #dfe6ef;border-radius:10px;padding:12px;">
-      <div style="font-size:14px;font-weight:700;color:#3b6fd4;margin-bottom:6px;">③ 逻辑关系</div>
-      <div style="font-size:14px;line-height:1.55;color:#1f2d3d;"><b>validate</b> 434★<br><a href="https://github.com/data-cleaning/validate" style="color:#2f7d5a;">github.com/data-cleaning/validate</a><br><span style="color:#5b6b7c;font-size:12px;">validator() 写跨变量规则，confront() 比对，violations() 出问题清单</span></div>
-      <div style="font-size:14px;line-height:1.55;color:#1f2d3d;margin-top:6px;"><b>pointblank</b>：col_vals_expr() 行内表达式</div>
-    </div>
-    <div style="flex:1 1 160px;min-width:160px;background:#fff;border:1px solid #dfe6ef;border-radius:10px;padding:12px;">
-      <div style="font-size:14px;font-weight:700;color:#3b6fd4;margin-bottom:6px;">④ 缺失值</div>
-      <div style="font-size:14px;line-height:1.55;color:#1f2d3d;"><b>naniar</b> 675★<br><a href="https://github.com/njtierney/naniar" style="color:#2f7d5a;">github.com/njtierney/naniar</a><br><span style="color:#5b6b7c;font-size:12px;">miss_var_summary() 缺失统计</span></div>
-      <div style="font-size:14px;line-height:1.55;color:#1f2d3d;margin-top:6px;"><b>visdat</b> 463★ · <b>dlookr</b> 214★<br><a href="https://github.com/ropensci/visdat" style="color:#2f7d5a;">github.com/ropensci/visdat</a><br><span style="color:#5b6b7c;font-size:12px;">vis_miss() 可视化；imputate_na() 插补</span></div>
-    </div>
-    <div style="flex:1 1 160px;min-width:160px;background:#fff;border:1px solid #dfe6ef;border-radius:10px;padding:12px;">
-      <div style="font-size:14px;font-weight:700;color:#3b6fd4;margin-bottom:6px;">⑤ 异常连续变量</div>
-      <div style="font-size:14px;line-height:1.55;color:#1f2d3d;"><b>dlookr</b> 214★<br><a href="https://github.com/choonghyunryu/dlookr" style="color:#2f7d5a;">github.com/choonghyunryu/dlookr</a><br><span style="color:#5b6b7c;font-size:12px;">diagnose_outlier() 离群值诊断</span></div>
-      <div style="font-size:14px;line-height:1.55;color:#1f2d3d;margin-top:6px;"><b>dataReporter</b>（原 dataMaid 143★）<br><a href="https://github.com/ekstroem/dataReporter" style="color:#2f7d5a;">github.com/ekstroem/dataReporter</a><br><span style="color:#5b6b7c;font-size:12px;">identifyOutliers 检查</span></div>
-    </div>
-    <div style="flex:1 1 160px;min-width:160px;background:#fff;border:1px solid #dfe6ef;border-radius:10px;padding:12px;">
-      <div style="font-size:14px;font-weight:700;color:#3b6fd4;margin-bottom:6px;">⑥ 输出所有异常</div>
-      <div style="font-size:14px;line-height:1.55;color:#1f2d3d;"><b>DataExplorer</b> 544★<br><a href="https://github.com/boxuancui/DataExplorer" style="color:#2f7d5a;">github.com/boxuancui/DataExplorer</a><br><span style="color:#5b6b7c;font-size:12px;">create_report() 一键 HTML 报告</span></div>
-      <div style="font-size:14px;line-height:1.55;color:#1f2d3d;margin-top:6px;"><b>dlookr</b> diagnose_report() · <b>pointblank</b> get_agent_report() · <b>skimr</b> 控制台速览 <a href="https://github.com/ropensci/skimr" style="color:#2f7d5a;">链接</a></div>
-    </div>
-    <div style="flex:1 1 160px;min-width:160px;background:#fff;border:1px solid #dfe6ef;border-radius:10px;padding:12px;">
-      <div style="font-size:14px;font-weight:700;color:#3b6fd4;margin-bottom:6px;">⑦ 改动并记录日志</div>
-      <div style="font-size:14px;line-height:1.55;color:#1f2d3d;"><b>tidylog</b> 623★<br><a href="https://github.com/elbersb/tidylog" style="color:#2f7d5a;">github.com/elbersb/tidylog</a><br><span style="color:#5b6b7c;font-size:12px;">自动打印每步 filter/mutate/join 的增删行数，天然改动日志</span></div>
-      <div style="font-size:14px;line-height:1.55;color:#1f2d3d;margin-top:6px;"><b>validate</b>：violations() 导出异常明细留痕</div>
-    </div>
-    <div style="flex:1 1 160px;min-width:160px;background:#2f7d5a;border:1px solid #1f5f44;border-radius:10px;padding:12px;">
-      <div style="font-size:14px;font-weight:700;color:#fff;margin-bottom:6px;">⑧ clean 数据</div>
-      <div style="font-size:14px;line-height:1.55;color:#eaf5ef;"><b>rio::export()</b> 写回 xlsx/csv；或 openxlsx::write.xlsx() / readr::write_csv()。异常报告 + 日志一并归档，可复现。</div>
-    </div>
-  </div>
-  <div style="font-size:12px;color:#8a99a8;margin-top:14px;">注：pointblank 的 R 主仓库是 rstudio/pointblank（posit-dev/pointblank 为 Python 移植版）；openxlsx 原 awalker89 仓库已移交 ycphs 维护。</div>
-</div>
-</html>
+flowchart LR
+    A[文件读写层<br/>rio / readxl / vroom / openxlsx] --> B[①重复个案<br/>janitor]
+    B --> C[②非法值<br/>pointblank, assertr]
+    C --> D[③逻辑关系<br/>validate, pointblank]
+    D --> E[④缺失值<br/>naniar, visdat, dlookr]
+    E --> F[⑤异常连续变量<br/>dlookr, dataReporter]
+    F --> G[⑥输出异常<br/>DataExplorer, dlookr, skimr]
+    G --> H[⑦改动记录日志<br/>tidylog, validate]
+    H --> I[⑧clean数据<br/>导出xlsx/csv+归档报告]
 
 ## 安装
 
