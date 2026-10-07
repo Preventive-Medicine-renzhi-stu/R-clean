@@ -1,17 +1,7 @@
-```
-flowchart TD
-    A["原始问卷数据<br/>xlsx / csv"] --> B["①查找重复个案<br/>janitor::get_dupes()"]
-    B --> C["②查找非法值<br/>in_set / between / regex / not_null"]
-    C --> D["③核查逻辑关系<br/>跨变量expr表达式校验"]
-    D --> E["④缺失值处理<br/>列缺失统计 + 关键缺失行号"]
-    E --> F["⑤异常连续变量<br/>IQR / Z分数离群值"]
-    F --> G["⑥输出所有异常<br/>HTML报告 + 异常明细CSV"]
-    G --> H["⑦改动并记录日志<br/>写入清洗日志csv/txt"]
-    H --> I["⑧得到clean数据<br/>保守清洗导出xlsx/csv"]
-```
-# Rclean
+# R-clean
 
 面向问卷 / 流行病学调查数据（**xlsx、csv**）的可复现质控与清洗 R 包。把固定的 8 步检查做成函数，把每份问卷不同的字段规则（范围、合法值、逻辑关系）外置成 **Excel 或 YAML 规则表**—— 新项目只需填规则表，一条命令产出全部异常清单、汇总报告、改动日志和 clean 数据。
+An R package for reproducible quality control and cleaning of questionnaire/epidemiological survey data (**xlsx, csv**). It encapsulates the standard 8-step checks into functions, and externalizes field-specific rules (ranges, valid values, logical relationships) for each questionnaire into **Excel or YAML rule tables**. For new projects, users only need to fill in the rule table, and one command generates a full exception list, summary report, change log, and cleaned dataset.
 
 ## 8 步流程
 
